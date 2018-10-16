@@ -70,42 +70,126 @@ int main(){
                                         
                                 } else if(maze[x+1][y] >= 65 || maze[x+1][y] <= 90) {
                                         //door found
-                                        
                                         int door = maze[x+1][y];
                                         for(int a = 0; a < key_len; a++) {
                                                 if(key[a] == door + 32) {
-                                                        
-                                                }
-                                                        
+                                                        s.push(pair<x+1,y>);        
+                                                } else if(a==key_len-1) {
+                                                        check[x+1][y] == 1;
+                                                }       
                                         }
                                 } else if(maze[x+1][y] == '$') {
                                         //document found
                                         res++;
-                                        check[x+1][y] == 1;
+                                        s.push(pair<x+1,y>);
                                 } else {
                                         //street? just pass
+                                        s.push(pair<x+1,y>);
                                 }
                                         
                         }
                         
                         if(x-1 > 0 && check[x-1][y] == 0) {
+                                
+                                if(maze[x+1][y] >= 97 || maze[x+1][y] <= 122) {
+                                        //key found init!!
+                                        key[key_len] = maze[x+1][y];
+                                        while(!s.empty()){
+                                                s.pop();
+                                        }
+                                        
+                                        //init and start point stack push
+                                        
+                                        
+                                } else if(maze[x+1][y] >= 65 || maze[x+1][y] <= 90) {
+                                        //door found
+                                        int door = maze[x+1][y];
+                                        for(int a = 0; a < key_len; a++) {
+                                                if(key[a] == door + 32) {
+                                                        s.push(pair<x+1,y>);        
+                                                } else if(a==key_len-1) {
+                                                        check[x+1][y] == 1;
+                                                }       
+                                        }
+                                } else if(maze[x+1][y] == '$') {
+                                        //document found
+                                        res++;
+                                        s.push(pair<x+1,y>);
+                                } else {
+                                        //street? just pass
+                                        s.push(pair<x+1,y>);
+                                }
                         }
                         
                         if(y-1 > 0 && check[x][y-1] == 0) {
+                                
+                                if(maze[x+1][y] >= 97 || maze[x+1][y] <= 122) {
+                                        //key found init!!
+                                        key[key_len] = maze[x+1][y];
+                                        while(!s.empty()){
+                                                s.pop();
+                                        }
+                                        
+                                        //init and start point stack push
+                                        
+                                        
+                                } else if(maze[x+1][y] >= 65 || maze[x+1][y] <= 90) {
+                                        //door found
+                                        int door = maze[x+1][y];
+                                        for(int a = 0; a < key_len; a++) {
+                                                if(key[a] == door + 32) {
+                                                        s.push(pair<x+1,y>);        
+                                                } else if(a==key_len-1) {
+                                                        check[x+1][y] == 1;
+                                                }       
+                                        }
+                                } else if(maze[x+1][y] == '$') {
+                                        //document found
+                                        res++;
+                                        s.push(pair<x+1,y>);
+                                } else {
+                                        //street? just pass
+                                        s.push(pair<x+1,y>);
+                                }
                         }
                         
                         if(y+1 < h && check[x][y+1] == 0) {
+                                
+                                if(maze[x+1][y] >= 97 || maze[x+1][y] <= 122) {
+                                        //key found init!!
+                                        key[key_len] = maze[x+1][y];
+                                        while(!s.empty()){
+                                                s.pop();
+                                        }
+                                        
+                                        //init and start point stack push
+                                        
+                                        
+                                } else if(maze[x+1][y] >= 65 || maze[x+1][y] <= 90) {
+                                        //door found
+                                        int door = maze[x+1][y];
+                                        for(int a = 0; a < key_len; a++) {
+                                                if(key[a] == door + 32) {
+                                                        s.push(pair<x+1,y>);        
+                                                } else if(a==key_len-1) {
+                                                        check[x+1][y] == 1;
+                                                }       
+                                        }
+                                } else if(maze[x+1][y] == '$') {
+                                        //document found
+                                        res++;
+                                        s.push(pair<x+1,y>);
+                                } else {
+                                        //street? just pass
+                                        s.push(pair<x+1,y>);
+                                }
                         }
                         
                         
 
                 }
                 t--;
-
-
-//        printf("%s\n",maze[0]);
-//        printf("%s\n",maze[1]);
-//        printf("%c\n",maze[0][0]);
+                printf("%d\n",res);
         }
 
         return 0;
