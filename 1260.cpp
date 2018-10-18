@@ -5,6 +5,7 @@ using namespace std;
 int main() {
 	int n, m, v;
 	scanf("%d %d %d", &n, &m, &v);
+	
 	int **graph = new int*[n+1];
 	bool *check = new bool[n + 1];
 	//동적할당
