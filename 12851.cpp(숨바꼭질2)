@@ -1,0 +1,71 @@
+#include <cstdio>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+int main() {
+
+	int n, k;
+	queue<int> q;
+
+	int check[100001] = { 0, };
+	int res[100001] = { 0, };
+
+	scanf("%d %d", &n, &k);
+
+	q.push(n);
+	res[n] = 0;
+	check[n] = 1;
+	int cnt = 0;
+	int min;
+	while (!q.empty()) {
+
+		int now = q.front();
+		check[now] = 1;
+		q.pop();
+
+		if (k == now) {
+			if (cnt == 0) {
+				min = res[now];
+				cnt++;
+			}
+			else if (min >= res[now]) {
+				if (min == res[now])
+					cnt++;
+			}
+
+		}
+
+		if (now - 1 >= 0) {
+			if (check[now - 1] == 0&& res[now-1]==0) {
+				q.push(now - 1);
+				res[now - 1] = res[now] + 1;
+			}
+			else if (res[now] + 1 == res[now - 1]) {
+				q.push(now - 1);
+			}
+		}
+		if (now + 1 <= 100000) {
+			if (check[now + 1] == 0 && res[now+1] == 0) {
+				q.push(now + 1);
+				res[now + 1] = res[now] + 1;
+			}
+			else if (res[now] + 1 == res[now + 1]) {
+				q.push(now + 1);
+			}
+		}
+		if (now * 2 <= 100000) {
+			if (check[now * 2] == 0 && res[now*2] == 0) {
+				q.push(now * 2);
+				res[now * 2] = res[now] + 1;
+			}
+			else if (res[now] + 1 == res[now * 2]) {
+				q.push(now * 2);
+			}
+		}
+	}
+
+	printf("%d\n%d\n", min, cnt);
+	return 0;
+}
