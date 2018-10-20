@@ -1,0 +1,98 @@
+#include <cstdio>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+int N, M;
+vector<pair<int, int>> wall;
+vector<pair<int, int>> virus;
+vector<pair<int, int>> street;
+vector<pair<int, int>> add_wall;
+int map[8][8];
+int dx[4] = { 1,0,-1,0 };
+int dy[4] = { 0,1,0,-1 };
+int ans = 0;
+
+void calc() {
+	int map[8][8] = { 0, };
+	queue<pair<int, int>> virus_q;
+	for (int i = 0;i < wall.size();i++) {
+		int x = wall[i].second;
+		int y = wall[i].first;
+		map[y][x] = 1;
+	}
+	for (int i = -0;i < virus.size();i++) {
+		int x = virus[i].second;
+		int y = virus[i].first;
+		map[y][x] = 2;
+		virus_q.push(virus[i]);
+	}
+	for (int i = 0;i < add_wall.size();i++) {
+		int x = add_wall[i].second;
+		int y = add_wall[i].first;
+		map[y][x] = 1;
+	}
+
+	while (!virus_q.empty()) {
+		int y = virus_q.front().first;
+		int x = virus_q.front().second;
+		virus_q.pop();
+		for (int i = 0;i < 4;i++) {
+			int nextX = x + dx[i];
+			int nextY = y + dy[i];
+
+			if (nextX >= 0 && nextX < M && nextY >= 0 && nextY < N) {
+				if (map[nextY][nextX] == 0) {
+					map[nextY][nextX] = 2;
+					virus_q.push(make_pair(nextY, nextX));
+				}
+					
+			}
+		}
+	}
+
+	int temp = 0;
+	for (int i = 0;i < N;i++) {
+		for (int j = 0;j < M;j++) {
+			if (map[i][j] == 0)
+				temp++;
+		}
+	}
+
+	ans = max(ans, temp);
+
+}
+void select(int cnt, int idx) {
+	if (cnt == 3) {
+		calc();
+		return;
+	}
+
+	for (int i = idx;i < street.size();i++) {
+		add_wall.push_back(street[i]);
+		select(cnt + 1, i + 1);
+		add_wall.pop_back();
+	}
+}
+int main()
+{
+	scanf("%d %d", &N, &M);
+
+	for (int i = 0;i < N;i++) {
+		for (int j = 0;j < M;j++) {
+			scanf(" %d", &map[i][j]);
+			if (map[i][j] == 0)
+				street.push_back(make_pair(i, j));
+			else if(map[i][j] == 1)
+				wall.push_back(make_pair(i, j));
+			else if(map[i][j] == 2)
+				virus.push_back(make_pair(i, j));
+		}
+	}
+
+	select(0, 0);
+	printf("%d\n", ans);
+
+}
