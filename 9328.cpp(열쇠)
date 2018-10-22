@@ -1,0 +1,260 @@
+#include <cstdio>
+#include <stack>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+int t, h, w;
+int res;
+char maze[101][101];
+int check[101][101];
+char key[27];
+char str[27];
+int key_len;
+stack<pair<int, int>> s;
+bool found_doc[101][101];
+int flag = 0;
+void reset() {
+
+	for (int i = 0; i < 101; i++) {
+		for (int j = 0; j < 101; j++) {
+			maze[i][j] = 0;
+			check[i][j] = 0;
+		}
+	}
+	res = 0;
+	key_len = 0;
+	for (int i = 0; i < 27; i++) {
+		key[i] = 0;
+		str[i] = 0;
+	}
+
+}
+
+void init() {
+	res = 0;
+	flag = 0;
+	int reset_flag = 0;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			check[i][j] = 0;
+			found_doc[i][j] = false;
+			if (maze[i][j] == '*')
+				check[i][j] = 1;
+			else if (i == 0 || i == h - 1) {
+				if (maze[i][j] >= 97 && maze[i][j] <= 122) {
+					if (key[maze[i][j] - 96] == 0) {
+						key[maze[i][j] - 96] = maze[i][j];
+						key_len++;
+						s.push(make_pair(i, j));
+						check[i][j] = 1;
+						reset_flag = 1;
+					}
+
+
+				}
+				else if (maze[i][j] >= 65 && maze[i][j] <= 90) {
+					char door = maze[i][j];
+					check[i][j] = 1;
+					if (door + 32 == key[door - 64])
+						s.push(make_pair(i, j));
+
+				}
+				else if (maze[i][j] == '$') {
+					s.push(make_pair(i, j));
+					check[i][j] = 1;
+					res++;
+					found_doc[i][j] = true;
+				}
+				else {
+					s.push(make_pair(i, j));
+					check[i][j] = 1;
+				}
+
+			}
+			else if (j == 0 || j == w - 1) {
+				if (maze[i][j] >= 97 && maze[i][j] <= 122) {
+					if (key[maze[i][j] - 96] == 0) {
+						key[maze[i][j] - 96] = maze[i][j];
+						key_len++;
+						s.push(make_pair(i, j));
+						check[i][j] = 1;
+						reset_flag = 1;
+					}
+
+				}
+				else if (maze[i][j] >= 65 && maze[i][j] <= 90) {
+					char door = maze[i][j];
+					check[i][j] = 1;
+					if (door + 32 == key[door - 64])
+						s.push(make_pair(i, j));
+
+				}
+				else if (maze[i][j] == '$') {
+					s.push(make_pair(i, j));
+					check[i][j] = 1;
+					res++;
+					found_doc[i][j] = true;
+				}
+				else {
+					s.push(make_pair(i, j));
+					check[i][j] = 1;
+				}
+
+			}
+		}
+	}
+	if (reset_flag == 1) {
+		init();
+	}
+
+
+}
+void maze_check(int y, int x);
+void key_check(int y, int x) {
+	char temp_key = maze[y][x];
+	
+	if (temp_key >= 97 && temp_key <= 122) {
+		check[y][x] = 1;
+		if (key[temp_key - 96] == temp_key) {
+			maze[y][x] = '.';
+			return;
+		}
+		key[temp_key - 96] = temp_key;
+		key_len++;
+		flag = 1;
+		maze_check(y, x);
+	}
+}
+void door_check(int y, int x) {
+	char door = maze[y][x];
+
+	if (door >= 65 && door <= 90) {
+		check[y][x] = 1;
+		if (key[door - 64] == door + 32)
+			s.push(make_pair(y, x));
+	}
+}
+void else_check(int y, int x) {
+	char temp = maze[y][x];
+	if (temp == '$') {
+		res++;
+		found_doc[y][x] = true;
+		check[y][x] = 1;
+		s.push(make_pair(y, x));
+	}
+	else if (temp == '.') {
+		check[y][x] = 1;
+		s.push(make_pair(y, x));
+	}
+	else if (temp == '*') {
+		check[y][x] = 1;
+	}
+}
+void maze_check(int y, int x) {
+	if (x + 1 < w && check[y][x + 1] == 0) {
+		key_check(y, x + 1);
+		if (flag == 1)
+		{
+			while (!s.empty()) {
+				s.pop();
+			}
+			res = 0;
+			init();
+			return;
+		}
+		door_check(y, x + 1);
+		else_check(y, x + 1);
+	}
+	if (x - 1 >= 0 && check[y][x - 1] == 0) {
+		key_check(y, x - 1);
+		if (flag == 1)
+		{
+			while (!s.empty()) {
+				s.pop();
+			}
+			res = 0;
+			init();
+			return;
+		}
+		door_check(y, x - 1);
+		else_check(y, x - 1);
+	}
+	if (y + 1 < h && check[y + 1][x] == 0) {
+		key_check(y + 1, x);
+		if (flag == 1)
+		{
+			while (!s.empty()) {
+				s.pop();
+			}
+			res = 0;
+			init();
+			return;
+		}
+		door_check(y + 1, x);
+		else_check(y + 1, x);
+	}
+	if (y - 1 >= 0 && check[y - 1][x] == 0) {
+		key_check(y - 1, x);
+		if (flag == 1)
+		{
+			while (!s.empty()) {
+				s.pop();
+			}
+			res = 0;
+			init();
+			return;
+		}
+		door_check(y - 1, x);
+		else_check(y - 1, x);
+	}
+}
+int main() {
+	scanf("%d", &t);
+	int *total_res = new int[t];
+	int total_idx = 0;
+	while (t > 0) {
+		scanf("%d %d", &h, &w);
+		reset();
+
+		for (int i = 0; i < h; i++) {
+			char str[101];
+			scanf("%s", str);
+
+			for (int j = 0; j < w; j++) {
+				maze[i][j] = str[j];
+				check[i][j] = 0;
+			}
+		}
+		scanf("%s", str);
+		key_len = strlen(str);
+
+		for (int i = 0; i < key_len; i++) {
+			if (str[i] == 0)
+				key[0] = 0;
+			else
+				key[str[i] - 96] = str[i];
+		}
+
+		init();
+
+		while (!s.empty()) {
+			int x, y;
+			y = s.top().first;
+			x = s.top().second;
+			check[y][x] = 1;
+			s.pop();
+
+			maze_check(y, x);
+
+
+		}
+		t--;
+		printf("%d\n", res);
+		
+	}
+
+	
+	return 0;
+}
+
