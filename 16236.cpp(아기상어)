@@ -1,0 +1,66 @@
+#include <cstdio>
+#include <queue>
+
+using namespace std;
+
+int N;
+int M;
+int map[20][20];
+
+int shark_x, shark_y;
+int fish_cnt = 0;
+int time = 0;
+int fish_size = 2;
+
+int dx[4] = { 1.0,-1,1 };
+int dy[4] = { 0,1,0,-1 };
+
+queue <pair<int,int>> q;
+queue <pair<pair<int, int>, int>> fish_q;
+
+int find(int y, int x) {
+	int nowX, nowY;
+	int nextX, nextY;
+
+	q.push(make_pair(y, x));
+	while (fish_q.empty()) {
+		nowX = q.front().second;
+		nowY = q.front().first;
+		q.pop();
+
+		for (int i = 0; i < 4; i++) {
+			nextX = nowX + dx[i];
+			nextY = nowY + dy[i];
+
+			if (nextX >= 0 && nextX < N && nextY >= 0 && nextY < N) {
+				if (map[nextY][nextX] <= fish_size) {
+
+				}
+			}
+			
+		}
+	}
+}
+
+int main() {
+	scanf("%d", &N);
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			scanf(" %d", &map[i][j]);
+			if (map[i][j] == 9) {
+				shark_x = j;
+				shark_y = i;
+			}
+			else if (map[i][j] > 0 && map[i][j] < 7) {
+				fish_cnt++;
+			}
+		}
+	}
+
+	while (fish_cnt > 0) {
+
+	}
+
+	printf("%d\n", time);
+}
